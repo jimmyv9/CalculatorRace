@@ -3,30 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Calculator</title>
+    <title>iPhone-like Calculator</title>
     <style>
-        .calculator {
-            width: 300px;
-            margin: 100px auto;
-            padding: 10px;
-            border: 1px solid #ccc;
-            box-shadow: 2px 2px 5px #aaa;
-            border-radius: 5px;
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
+
+        .calculator {
+            width: 250px;
+            background-color: #a0a0a0;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+        }
+
         .display {
             width: 100%;
-            padding: 10px;
-            font-size: 20px;
-            margin-bottom: 10px;
+            padding: 10px 20px;
+            font-size: 24px;
+            background-color: #2c2c2c;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            text-align: right;
+            margin-bottom: 20px;
         }
+
         .buttons {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 10px;
         }
+
         button {
             padding: 15px;
-            font-size: 18px;
+            font-size: 20px;
+            border: none;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        button.dark-gray {
+            background-color: #333333;
+            color: white;
+        }
+
+        button.light-gray {
+            background-color: #a6a6a6;
+            color: black;
+        }
+
+        button.orange {
+            background-color: #ff9500;
+            color: white;
+        }
+
+        button.dark-gray:hover,
+        button.light-gray:hover,
+        button.orange:hover {
+            background-color: #ff7700;
         }
     </style>
 </head>
@@ -34,23 +78,25 @@
     <div class="calculator">
         <input type="text" class="display" id="display" disabled>
         <div class="buttons">
-            <button onclick="appendToDisplay('7')">7</button>
-            <button onclick="appendToDisplay('8')">8</button>
-            <button onclick="appendToDisplay('9')">9</button>
-            <button onclick="appendToDisplay('/')">/</button>
-            <button onclick="appendToDisplay('4')">4</button>
-            <button onclick="appendToDisplay('5')">5</button>
-            <button onclick="appendToDisplay('6')">6</button>
-            <button onclick="appendToDisplay('*')">*</button>
-            <button onclick="appendToDisplay('1')">1</button>
-            <button onclick="appendToDisplay('2')">2</button>
-            <button onclick="appendToDisplay('3')">3</button>
-            <button onclick="appendToDisplay('-')">-</button>
-            <button onclick="appendToDisplay('0')">0</button>
-            <button onclick="appendToDisplay('.')">.</button>
-            <button onclick="calculate()">=</button>
-            <button onclick="appendToDisplay('+')">+</button>
-            <button onclick="clearDisplay()" colspan="4">C</button>
+            <button class="light-gray" onclick="clearDisplay()">C</button>
+            <button class="light-gray" onclick="appendToDisplay('+/-')">+/-</button>
+            <button class="light-gray" onclick="appendToDisplay('%')">%</button>
+            <button class="orange" onclick="appendToDisplay('/')">÷</button>
+            <button class="dark-gray" onclick="appendToDisplay('7')">7</button>
+            <button class="dark-gray" onclick="appendToDisplay('8')">8</button>
+            <button class="dark-gray" onclick="appendToDisplay('9')">9</button>
+            <button class="orange" onclick="appendToDisplay('*')">×</button>
+            <button class="dark-gray" onclick="appendToDisplay('4')">4</button>
+            <button class="dark-gray" onclick="appendToDisplay('5')">5</button>
+            <button class="dark-gray" onclick="appendToDisplay('6')">6</button>
+            <button class="orange" onclick="appendToDisplay('-')">-</button>
+            <button class="dark-gray" onclick="appendToDisplay('1')">1</button>
+            <button class="dark-gray" onclick="appendToDisplay('2')">2</button>
+            <button class="dark-gray" onclick="appendToDisplay('3')">3</button>
+            <button class="orange" onclick="appendToDisplay('+')">+</button>
+            <button class="dark-gray" style="grid-column: span 2" onclick="appendToDisplay('0')">0</button>
+            <button class="dark-gray" onclick="appendToDisplay('.')">.</button>
+            <button class="orange" onclick="calculate()">=</button>
         </div>
     </div>
 
@@ -58,7 +104,15 @@
         const display = document.getElementById('display');
 
         function appendToDisplay(value) {
-            display.value += value;
+            if (value === '+/-') {
+                if (display.value.charAt(0) === '-') {
+                    display.value = display.value.slice(1);
+                } else {
+                    display.value = '-' + display.value;
+                }
+            } else {
+                display.value += value;
+            }
         }
 
         function clearDisplay() {
@@ -67,7 +121,7 @@
 
         function calculate() {
             try {
-                display.value = eval(display.value);
+                display.value = eval(display.value.replace('×', '*').replace('÷', '/'));
             } catch (e) {
                 display.value = 'Error';
             }
