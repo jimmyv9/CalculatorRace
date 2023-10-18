@@ -16,7 +16,7 @@
 
         .calculator {
             width: 250px;
-            background-color: #a0a0a0;
+            background-color: #afafaf;
             border-radius: 20px;
             padding: 20px;
             box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
@@ -24,7 +24,7 @@
 
         .display {
             width: 100%;
-            padding: 10px 20px;
+            padding: 20px;
             font-size: 24px;
             background-color: #2c2c2c;
             color: white;
@@ -70,7 +70,7 @@
         button.dark-gray:hover,
         button.light-gray:hover,
         button.orange:hover {
-            background-color: #ff7700;
+            filter: brightness(0.9);
         }
     </style>
 </head>
@@ -79,7 +79,7 @@
         <input type="text" class="display" id="display" disabled>
         <div class="buttons">
             <button class="light-gray" onclick="clearDisplay()">C</button>
-            <button class="light-gray" onclick="appendToDisplay('+/-')">+/-</button>
+            <button class="light-gray" onclick="toggleSign()">+/-</button>
             <button class="light-gray" onclick="appendToDisplay('%')">%</button>
             <button class="orange" onclick="appendToDisplay('/')">÷</button>
             <button class="dark-gray" onclick="appendToDisplay('7')">7</button>
@@ -104,14 +104,14 @@
         const display = document.getElementById('display');
 
         function appendToDisplay(value) {
-            if (value === '+/-') {
-                if (display.value.charAt(0) === '-') {
-                    display.value = display.value.slice(1);
-                } else {
-                    display.value = '-' + display.value;
-                }
+            display.value += value;
+        }
+
+        function toggleSign() {
+            if (display.value.charAt(0) === '-') {
+                display.value = display.value.slice(1);
             } else {
-                display.value += value;
+                display.value = '-' + display.value;
             }
         }
 
